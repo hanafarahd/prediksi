@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title fw-bold mb-4"><a href="{{ '/pencatatan' }}"></a> <b class="mx-2">Tambah
-                            Pencatatan</b>
+                            Pencatatan Zuhal iki brooo</b>
                     </h5>
                     <div class="card">
                         <div class="card-body">
