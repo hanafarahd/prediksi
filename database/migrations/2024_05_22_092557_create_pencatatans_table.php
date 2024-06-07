@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('pencatatans', function (Blueprint $table) {
             $table->id();
-            $table->date('cutoff_date');
             $table->string('invoice');
+            $table->date('cutoff_date');
             $table->date('due_date');
             $table->date('trans_date');
-            $table->string('p_piutang');
+            $table->string('p_piutang')->nullable();
             $table->timestamps();
         });
     }

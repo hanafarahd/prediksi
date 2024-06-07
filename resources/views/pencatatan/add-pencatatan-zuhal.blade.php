@@ -9,7 +9,7 @@
                     <h5 class="card-title fw-bold mb-4">
                         <a href="{{ '/pencatatan' }}"></a>
                         <b class="mx-2">
-                            Tambah Pencatatan
+                            Tambah Pencatatan Zuhal ganteng
                         </b>
                     </h5>
                     <div class="card">
@@ -46,17 +46,22 @@
 
                                     <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="due_date" class="form-label">Due Date<label
-                                                    class="text-red">*</label></label>
-                                            <input type="date" class="form-control" id="due_date" name="due_date">
+                                            <label for="due_date" class="form-label">
+                                                Due Date<label class="text-red">*</label>
+                                            </label>
+                                            <input type="date" class="form-control" id="due_date" name="due_date"
+                                                disabled>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="trans_date" class="form-label">Trans Date<label
-                                                    class="text-red">*</label></label>
-                                            <input type="date" class="form-control" id="trans_date" name="trans_date">
+                                            <label for="trans_date" class="form-label">
+                                                Trans Date
+                                                <label class="text-red">*</label>
+                                            </label>
+                                            <input type="date" class="form-control" id="trans_date" name="trans_date"
+                                                disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -64,8 +69,12 @@
                                 <button class="btn btn-danger mt-3" onclick="sendColab(event)">Tampilkan Hasil
                                     Prediksi</button>
 
-                                <div class="row" style="display:none;" id="hiddenRow">
-                                    <div class="col-sm-12">
+                                <div class="row">
+                                    <span id="loadingSpinner" style="margin-left: 10px; display: none"
+                                        class="spinner-border spinner-border-lg mt-3" role="status"
+                                        aria-hidden="true"></span>
+
+                                    <div class="col-sm-12" id="hiddenRow" style="display: none">
                                         <div class="col-sm-12 mt-3">
                                             <div class="mb-3">
                                                 <label for="p_piutang" class="form-label">Prediksi Piutang<label
@@ -171,6 +180,12 @@
                         cutOffDay: cutOffDate.day
                     };
 
+                    document.getElementById("loadingSpinner").style.display = "inline-block";
+
+                    // Sembunyikan hasil prediksi
+                    document.getElementById("hiddenRow").style.display = "none";
+                    document.getElementById("simpanButton").style.display = "none";
+
                     fetch('/predict', {
                             method: 'POST',
                             headers: {
@@ -180,6 +195,7 @@
                         })
                         .then(response => response.json())
                         .then(data => {
+                            document.getElementById("loadingSpinner").style.display = "none";
                             document.getElementById("hiddenRow").style.display = "block";
                             document.getElementById("p_piutang").value = data["Hasil Prediksi Piutang"];
                             document.getElementById("simpanButton").style.display = "block";
