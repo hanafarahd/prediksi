@@ -33,7 +33,7 @@
                                             <td>{{ $p->p_piutang }}</td>
 
                                             <td>
-                                                <a href="/delete-pencatatan{{ encrypt($p->id) }}"><button
+                                                <a href="/delete-pencatatan/{{ $p->id }}"><button
                                                         class="btn btn2 btn-danger"><i
                                                             class="fas fa-trash-alt"></i></button></a>
                                             </td>

@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Tambah Pencatatan')
 @section('content')
-
     <div class="container-fluid">
         <div class="container-fluid">
             <div class="card">
@@ -20,8 +19,9 @@
                                     <h5 class="mb-4 text-center"><b>Data Piutang</b></h5>
                                     <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="cutoff_date" class="form-label">Cut Off Date <label
-                                                    class="text-red">*</label></label>
+                                            <label for="cutoff_date" class="form-label">
+                                                Cut Off Date<label class="text-red">*</label>
+                                            </label>
                                             <input type="date" class="form-control" id="cutoff_date" name="cutoff_date"
                                                 value="{{ now()->toDateString() }}" required disabled>
                                         </div>
@@ -46,17 +46,22 @@
 
                                     <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="due_date" class="form-label">Due Date<label
-                                                    class="text-red">*</label></label>
-                                            <input type="date" class="form-control" id="due_date" name="due_date">
+                                            <label for="due_date" class="form-label">
+                                                Due Date<label class="text-red">*</label>
+                                            </label>
+                                            <input type="date" class="form-control" id="due_date" name="due_date"
+                                                disabled>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <div class="mb-3">
-                                            <label for="trans_date" class="form-label">Trans Date<label
-                                                    class="text-red">*</label></label>
-                                            <input type="date" class="form-control" id="trans_date" name="trans_date">
+                                            <label for="trans_date" class="form-label">
+                                                Trans Date
+                                                <label class="text-red">*</label>
+                                            </label>
+                                            <input type="date" class="form-control" id="trans_date" name="trans_date"
+                                                disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -64,8 +69,12 @@
                                 <button class="btn btn-danger mt-3" onclick="sendColab(event)">Tampilkan Hasil
                                     Prediksi</button>
 
-                                <div class="row" style="display:none;" id="hiddenRow">
-                                    <div class="col-sm-12">
+                                <div class="row">
+                                    <span id="loadingSpinner" style="margin-left: 10px; display: none"
+                                        class="spinner-border spinner-border-lg mt-3" role="status"
+                                        aria-hidden="true"></span>
+
+                                    <div class="col-sm-12" id="hiddenRow" style="display: none">
                                         <div class="col-sm-12 mt-3">
                                             <div class="mb-3">
                                                 <label for="p_piutang" class="form-label">Prediksi Piutang<label
@@ -80,13 +89,11 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary mt-3" style="display: none;" id="simpanButton"
-                                    onclick="showSwal()">Simpan</button>
+                                <button type="submit" class="btn btn-primary mt-3" style="display: none;"
+                                    id="simpanButton">Simpan</button>
                             </form>
-
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -151,25 +158,26 @@
                 cancelButtonText: "Tidak"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    let transDateStr = document.getElementById('trans_date').value;
                     let dueDateStr = document.getElementById('due_date').value;
                     let cutOffDateStr = document.getElementById('cutoff_date').value;
 
-                    let transDate = parseDate(transDateStr);
                     let dueDate = parseDate(dueDateStr);
                     let cutOffDate = parseDate(cutOffDateStr);
 
                     let numericData = {
-                        transMonth: transDate.month,
-                        transYear: transDate.year,
-                        transDay: transDate.day,
-                        dueMonth: dueDate.month,
-                        dueYear: dueDate.year,
-                        dueDay: dueDate.day,
-                        cutOffMonth: cutOffDate.month,
-                        cutOffYear: cutOffDate.year,
-                        cutOffDay: cutOffDate.day
+                        dueYear: Number(dueDate.year),
+                        dueMonth: Number(dueDate.month),
+                        dueDay: Number(dueDate.day),
+                        cutOffYear: Number(cutOffDate.year),
+                        cutOffMonth: Number(cutOffDate.month),
+                        cutOffDay: Number(cutOffDate.day)
                     };
+
+                    document.getElementById("loadingSpinner").style.display = "inline-block";
+
+                    // Sembunyikan hasil prediksi
+                    document.getElementById("hiddenRow").style.display = "none";
+                    document.getElementById("simpanButton").style.display = "none";
 
                     fetch('/predict', {
                             method: 'POST',
@@ -180,14 +188,14 @@
                         })
                         .then(response => response.json())
                         .then(data => {
+                            console.log('aman cuyy')
+                            document.getElementById("loadingSpinner").style.display = "none";
                             document.getElementById("hiddenRow").style.display = "block";
                             document.getElementById("p_piutang").value = data["Hasil Prediksi Piutang"];
                             document.getElementById("simpanButton").style.display = "block";
                             document.getElementById("p_piutang_display").value = data["Hasil Prediksi Piutang"];
                         })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
+                        .catch(error => console.error('Error:', error))
                 }
             });
         }

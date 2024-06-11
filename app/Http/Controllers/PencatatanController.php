@@ -8,6 +8,7 @@ use Database\Seeders\PencatatanSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 
 class PencatatanController extends Controller
@@ -22,7 +23,7 @@ class PencatatanController extends Controller
     {
         $piutang = DB::table('pencatatans')->select('id', 'cutoff_date', 'invoice', 'due_date', 'trans_date', 'p_piutang')->get();
 
-        return view('pencatatan.add-pencatatan-zuhal', ['piutang' => $piutang]);
+        return view('pencatatan.add-pencatatan', ['piutang' => $piutang]);
     }
 
     public function addInvoice()
@@ -50,17 +51,11 @@ class PencatatanController extends Controller
         }
     }
 
-    public function input(Request $request)
+    public function input(Request $request, $id)
     {
-        // dd($request);
         try {
-            DB::table('pencatatans')->insert([
-                'cutoff_date' => $request->cutoff_date,
-                'invoice' => $request->invoice,
-                'due_date' => $request->due_date,
-                'trans_date' => $request->trans_date,
+            DB::table('pencatatans')->where('id', )->update([               
                 'p_piutang' => $request->p_piutang,
-                'created_at' => Carbon::now(),
             ]);
 
             return redirect('/pencatatan')->with('success', 'Berhasil menambahkan Data Piutang.');
@@ -106,10 +101,15 @@ class PencatatanController extends Controller
             return abort(500, 'Error: Unable to decrypt the ID.');
         }
     }
+
     public function delete($id)
     {
         try {
-            $p = Pencatatan::find($id);
+
+            // Find the record and delete it
+            $pencatatan = Pencatatan::findOrFail($id);
+            $pencatatan->delete();
+
             return redirect('/pencatatan')->with('success', 'Berhasil hapus Piutang.');
         } catch (QueryException $e) {
             return redirect('/pencatatan')->with('error', 'Gagal hapus Piutang: ' . $e->getMessage());
