@@ -1,122 +1,96 @@
 @extends('layouts.app')
 @section('title', 'Tambah Pencatatan')
 @section('content')
-    <div class="container-fluid">
-        <div class="container-fluid">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title fw-bold mb-4">
-                        <a href="{{ '/pencatatan' }}"></a>
-                        <b class="mx-2">
-                            Tambah Pencatatan
-                        </b>
-                    </h5>
-                    <div class="card">
-                        <div class="card-body">
-                            <form id="myForm" method="POST" action="/add-pencatatan/store" enctype="multipart/form-data">
-                                {{ csrf_field() }}
-                                <div class="row">
-                                    <h5 class="mb-4 text-center"><b>Data Piutang</b></h5>
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label for="cutoff_date" class="form-label">
-                                                Cut Off Date<label class="text-red">*</label>
-                                            </label>
-                                            <input type="date" class="form-control" id="cutoff_date" name="cutoff_date"
-                                                value="{{ now()->toDateString() }}" required disabled>
-                                        </div>
-                                    </div>
+    <div class="container-fluid pt-2">
+        <div class="card ">
+            <div class="card-body">
+                <h5 class="card-title fw-bold mb-4">
+                    <a href="{{ '/pencatatan' }}"></a>
+                    <b class="mx-2">Prediksi Data Piutang</b>
+                </h5>
 
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label for="invoice" class="form-label">Invoice<label
-                                                    class="text-red">*</label></label>
-                                            <select class="form-control" id="invoice" name="invoice" required>
-                                                <option value="" selected disabled>Pilih Invoice</option>
-                                                @foreach ($piutang as $item)
-                                                    <option data-invoice="{{ $item->invoice }}"
-                                                        data-duedate="{{ $item->due_date }}"
-                                                        data-transdate="{{ $item->trans_date }}"
-                                                        data-cutoffdate="{{ $item->cutoff_date }}">{{ $item->invoice }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
+                <form id="myForm" method="POST" action="/add-pencatatan/store" enctype="multipart/form-data">
+                    {{ csrf_field() }}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <select class="form-control" id="record-invoice" name="invoice" required>
+                                    <option selected disabled>Pilih Invoice</option>
+                                    @foreach ($debts as $item)
+                                        <option data-invoice={{ $item->invoice }} data-sale_type={{ $item->sale_type }}
+                                            data-salesman_code={{ $item->salesman_code }}
+                                            data-customer_group_id={{ $item->customer_group_id }}
+                                            data-territory_code={{ $item->territory_code }}
+                                            data-guarantee_letter={{ $item->guarantee_letter }}
+                                            data-invoice_amount={{ $item->invoice_amount }}
+                                            data-outstanding={{ $item->outstanding }}
+                                            data-cutoff_date={{ $item->cutoff_date }}
+                                            data-trans_date={{ $item->trans_date }} data-due_date={{ $item->due_date }}
+                                            data-exchange_freq={{ $item->exchange_freq }}
+                                            data-bill_freq={{ $item->bill_freq }}>
+                                            {{ $item->invoice }}
+                                        </option>
+                                    @endforeach
+                                </select>
 
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label for="due_date" class="form-label">
-                                                Due Date<label class="text-red">*</label>
-                                            </label>
-                                            <input type="date" class="form-control" id="due_date" name="due_date"
-                                                disabled>
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
 
-                                    <div class="col-sm-6">
-                                        <div class="mb-3">
-                                            <label for="trans_date" class="form-label">
-                                                Trans Date
-                                                <label class="text-red">*</label>
-                                            </label>
-                                            <input type="date" class="form-control" id="trans_date" name="trans_date"
-                                                disabled>
-                                        </div>
-                                    </div>
+                    </div>
+
+                    <button class="btn btn-danger mt-3" onclick="sendColab(event)">
+                        Tampilkan Hasil Prediksi
+                    </button>
+
+                    <div class="row">
+                        <span id="loadingSpinner" style="margin-left: 10px; display: none"
+                            class="spinner-border spinner-border-lg mt-3" role="status" aria-hidden="true"></span>
+
+                        <div class="col-sm-12" id="hiddenRow" style="display: none">
+                            <div class="col-sm-12 mt-3">
+                                <div class="mb-3">
+                                    <label for="p_piutang" class="form-label">Prediksi Piutang<label
+                                            class="text-red">*</label></label>
+                                    <input type="text" class="form-control hasil-prediksi" id="p_piutang_display"
+                                        value="" name="p_piutang_display" required disabled>
+                                    <input type="hidden" class="form-control hasil-prediksi" id="p_piutang" value=""
+                                        name="p_piutang" required>
                                 </div>
-
-                                <button class="btn btn-danger mt-3" onclick="sendColab(event)">Tampilkan Hasil
-                                    Prediksi</button>
-
-                                <div class="row">
-                                    <span id="loadingSpinner" style="margin-left: 10px; display: none"
-                                        class="spinner-border spinner-border-lg mt-3" role="status"
-                                        aria-hidden="true"></span>
-
-                                    <div class="col-sm-12" id="hiddenRow" style="display: none">
-                                        <div class="col-sm-12 mt-3">
-                                            <div class="mb-3">
-                                                <label for="p_piutang" class="form-label">Prediksi Piutang<label
-                                                        class="text-red">*</label></label>
-                                                <input type="text" class="form-control hasil-prediksi"
-                                                    id="p_piutang_display" value="" name="p_piutang_display" required
-                                                    disabled>
-                                                <input type="hidden" class="form-control hasil-prediksi" id="p_piutang"
-                                                    value="" name="p_piutang" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary mt-3" style="display: none;"
-                                    id="simpanButton">Simpan</button>
-                            </form>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <button type="submit" class="btn btn-primary mt-3" style="display: none;"
+                        id="simpanButton">Simpan</button>
+                </form>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
-            const invoice = document.getElementById('invoice');
+            const invoice = document.getElementById('record-invoice');
 
             invoice.addEventListener('change', function() {
                 const selectedOption = invoice.options[invoice.selectedIndex];
+                // console.log(selectedOption.getAttribute('data-sale-type'), 'coyy')
 
                 const data = {
                     invoice: selectedOption.getAttribute('data-invoice'),
-                    due_date: selectedOption.getAttribute('data-duedate'),
-                    trans_date: selectedOption.getAttribute('data-transdate'),
-                    cutoff_date: selectedOption.getAttribute('data-cutoffdate')
+                    sale_type: selectedOption.getAttribute('data-sale_type'),
+                    salesman_code: selectedOption.getAttribute('data-salesman_code'),
+                    customer_group_id: selectedOption.getAttribute('data-customer_group_id'),
+                    territory_code: selectedOption.getAttribute('data-territory_code'),
+                    guarantee_letter: selectedOption.getAttribute('data-guarantee_letter'),
+                    invoice_amount: selectedOption.getAttribute('data-invoice_amount'),
+                    outstanding: selectedOption.getAttribute('data-outstanding'),
+                    cutoff_date: selectedOption.getAttribute('data-cutoff_date'),
+                    due_date: selectedOption.getAttribute('data-due_date'),
+                    trans_date: selectedOption.getAttribute('data-trans_date'),
+                    exchange_freq: selectedOption.getAttribute('data-exchange_freq'),
+                    bill_freq: selectedOption.getAttribute('data-bill_freq'),
                 };
 
-                // Set the values of the inputs
-                document.getElementById('due_date').value = data.due_date;
-                document.getElementById('trans_date').value = data.trans_date;
-                // Do not change the value of cutoff_date here
             });
         });
 
@@ -147,6 +121,8 @@
 
         function sendColab(e) {
             e.preventDefault();
+            const invoice = document.getElementById('record-invoice');
+            const selectedOption = invoice.options[invoice.selectedIndex];
 
             Swal.fire({
                 title: "Tunjukkan Hasil Analisa?",
@@ -158,20 +134,48 @@
                 cancelButtonText: "Tidak"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    let dueDateStr = document.getElementById('due_date').value;
-                    let cutOffDateStr = document.getElementById('cutoff_date').value;
+                    const cutoffDate = parseDate(selectedOption.getAttribute('data-cutoff_date'));
+                    const dueDate = parseDate(selectedOption.getAttribute('data-due_date'));
 
-                    let dueDate = parseDate(dueDateStr);
-                    let cutOffDate = parseDate(cutOffDateStr);
-
-                    let numericData = {
-                        dueYear: Number(dueDate.year),
-                        dueMonth: Number(dueDate.month),
-                        dueDay: Number(dueDate.day),
-                        cutOffYear: Number(cutOffDate.year),
-                        cutOffMonth: Number(cutOffDate.month),
-                        cutOffDay: Number(cutOffDate.day)
+                    const data = {
+                        invoice: parseInt(selectedOption.getAttribute('data-invoice')),
+                        sale_type: parseInt(selectedOption.getAttribute('data-sale_type')),
+                        salesman_code: parseInt(selectedOption.getAttribute('data-salesman_code')),
+                        customer_group_id: parseInt(selectedOption.getAttribute('data-customer_group_id')),
+                        territory_code: parseInt(selectedOption.getAttribute('data-territory_code')),
+                        guarantee_letter: selectedOption.getAttribute('data-guarantee_letter') === 'ada' ? 0 :
+                            1,
+                        invoice_amount: parseInt(selectedOption.getAttribute('data-invoice_amount')),
+                        outstanding: parseInt(selectedOption.getAttribute('data-outstanding')),
+                        exchange_freq: parseInt(selectedOption.getAttribute('data-exchange_freq')),
+                        bill_freq: parseInt(selectedOption.getAttribute('data-bill_freq')),
                     };
+
+                    // const data2 = {
+                    //     invoice: 1
+                    //     sale_type: 1
+                    //     salesman_code: 4
+                    //     customer_group_id: 1
+                    //     territory_code: 100104
+                    //     invoice_amount: 1
+                    //     outstanding: 3
+                    //     exchange_freq: 1
+                    //     bill_freq: 50
+                    //     guarantee_letter: 1
+                    //     due_date: 1
+                    //     cutoff_date: 1
+                    //     trans_date: 1
+                    // };
+
+                    const fixedData = {
+                        ...data,
+                        due_month: dueDate.month,
+                        due_day: dueDate.day,
+                        due_year: dueDate.year,
+                        cutoff_month: cutoffDate.month,
+                        cutoff_day: cutoffDate.day,
+                        cutoff_year: cutoffDate.year,
+                    }
 
                     document.getElementById("loadingSpinner").style.display = "inline-block";
 
@@ -184,11 +188,10 @@
                             headers: {
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify(numericData)
+                            body: JSON.stringify(fixedData)
                         })
                         .then(response => response.json())
                         .then(data => {
-                            console.log('aman cuyy')
                             document.getElementById("loadingSpinner").style.display = "none";
                             document.getElementById("hiddenRow").style.display = "block";
                             document.getElementById("p_piutang").value = data["Hasil Prediksi Piutang"];

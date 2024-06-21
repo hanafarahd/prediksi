@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Pencatatan;
-use Database\Seeders\PencatatanSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Log;
 
 class PencatatanController extends Controller
 {
@@ -21,25 +18,44 @@ class PencatatanController extends Controller
 
     public function addPencatatan()
     {
-        $piutang = DB::table('pencatatans')->select('id', 'cutoff_date', 'invoice', 'due_date', 'trans_date', 'p_piutang')->get();
+        $debts = DB::table('pencatatans')->get();
 
-        return view('pencatatan.add-pencatatan', ['piutang' => $piutang]);
+
+        return view('pencatatan.add-pencatatan', ['debts' => $debts]);
     }
 
     public function addInvoice()
     {
-        return view('pencatatan.add-invoice');
+        $sales = DB::table('sales')->get();
+        $salesmans = DB::table('salesmans')->get();
+        $territories = DB::table('territories')->get();
+        $customerGroups = DB::table('customer_groups')->get();
+
+        return view('pencatatan.add-invoice', [
+            'sales' => $sales,
+            'salesmans' => $salesmans,
+            'territories' => $territories,
+            'customerGroups' => $customerGroups
+        ]);
     }
 
     public function storeInvoice(Request $request)
     {
-        // dd($request->all());
         try {
             DB::table('pencatatans')->insert([
                 'invoice' => $request->invoice,
+                'sale_type' => $request->sale_type,
+                'salesman_code' => $request->salesman_code,
+                'customer_group_id' => $request->customer_group_id,
+                'territory_code' => $request->territory_code,
+                'guarantee_letter' => $request->guarantee,
+                'invoice_amount' => $request->invoice_amount,
+                'outstanding' => $request->outstanding,
                 'cutoff_date' => Carbon::now()->format('Y-m-d'),
                 'due_date' => $request->due_date,
                 'trans_date' => $request->trans_date,
+                'exchange_freq' => $request->exchange_freq,
+                'bill_freq' => $request->bill_freq,
                 'created_at' => Carbon::now(),
             ]);
 
@@ -54,14 +70,15 @@ class PencatatanController extends Controller
     public function input(Request $request, $id)
     {
         try {
-            DB::table('pencatatans')->where('id', )->update([               
+            DB::table('pencatatans')->where('id', $id)->update([
                 'p_piutang' => $request->p_piutang,
             ]);
 
             return redirect('/pencatatan')->with('success', 'Berhasil menambahkan Data Piutang.');
         } catch (QueryException $e) {
             $errorMessage = $e->getMessage();
-            // dd($errorMessage);
+            dd($errorMessage);
+
             return redirect('/pencatatan')->with('error', 'Gagal menambahkan Data Piutang: Coba Lagi $errorMessage');
         }
     }
