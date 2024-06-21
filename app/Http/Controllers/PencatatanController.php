@@ -67,14 +67,16 @@ class PencatatanController extends Controller
         }
     }
 
-    public function input(Request $request, $id)
+    public function input(Request $request)
     {
+        dd('testing coyyy');
+
         try {
-            DB::table('pencatatans')->where('id', $id)->update([
-                'p_piutang' => $request->p_piutang,
+            DB::table('pencatatans')->where('id', '')->update([
+                'prediction' => $request->p_piutang,
             ]);
 
-            return redirect('/pencatatan')->with('success', 'Berhasil menambahkan Data Piutang.');
+            return redirect('/dashboard')->with('success', 'Berhasil menambahkan Data Piutang.');
         } catch (QueryException $e) {
             $errorMessage = $e->getMessage();
             dd($errorMessage);

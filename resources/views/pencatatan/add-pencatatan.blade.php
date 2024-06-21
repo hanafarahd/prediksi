@@ -9,7 +9,7 @@
                     <b class="mx-2">Prediksi Data Piutang</b>
                 </h5>
 
-                <form id="myForm" method="POST" action="/add-pencatatan/store" enctype="multipart/form-data">
+                <form id="myForm" method="POST" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="col-sm-6">
@@ -32,10 +32,8 @@
                                         </option>
                                     @endforeach
                                 </select>
-
                             </div>
                         </div>
-
                     </div>
 
                     <button class="btn btn-danger mt-3" onclick="sendColab(event)">
@@ -73,7 +71,10 @@
 
             invoice.addEventListener('change', function() {
                 const selectedOption = invoice.options[invoice.selectedIndex];
-                // console.log(selectedOption.getAttribute('data-sale-type'), 'coyy')
+                const form = document.getElementById('myForm')
+
+                form.setAttribute('action',
+                    `/add-pencatatan/store/${selectedOption.getAttribute('data-invoice')}`)
 
                 const data = {
                     invoice: selectedOption.getAttribute('data-invoice'),
@@ -113,9 +114,7 @@
                 confirmButtonText: "Ya",
                 cancelButtonText: "Tidak"
             }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('myForm').submit();
-                }
+                if (result.isConfirmed) document.getElementById('myForm').submit()
             });
         }
 
@@ -150,22 +149,6 @@
                         exchange_freq: parseInt(selectedOption.getAttribute('data-exchange_freq')),
                         bill_freq: parseInt(selectedOption.getAttribute('data-bill_freq')),
                     };
-
-                    // const data2 = {
-                    //     invoice: 1
-                    //     sale_type: 1
-                    //     salesman_code: 4
-                    //     customer_group_id: 1
-                    //     territory_code: 100104
-                    //     invoice_amount: 1
-                    //     outstanding: 3
-                    //     exchange_freq: 1
-                    //     bill_freq: 50
-                    //     guarantee_letter: 1
-                    //     due_date: 1
-                    //     cutoff_date: 1
-                    //     trans_date: 1
-                    // };
 
                     const fixedData = {
                         ...data,
