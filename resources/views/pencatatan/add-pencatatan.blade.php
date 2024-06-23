@@ -6,7 +6,7 @@
             <div class="card-body">
                 <h5 class="card-title fw-bold mb-4">
                     <a href="{{ '/pencatatan' }}"></a>
-                    <b class="mx-2">Prediksi Data Piutang TES</b>
+                    <b class="mx-2">Prediksi Data Piutang ZUHAL GANTENG WOII</b>
                 </h5>
 
                 <form id="myForm" method="POST" enctype="multipart/form-data">
@@ -74,7 +74,9 @@
                 const form = document.getElementById('myForm')
 
                 form.setAttribute('action',
-                    `/add-pencatatan/store/${selectedOption.getAttribute('data-invoice')}`)
+                    /add-pencatatan/store / $ {
+                        selectedOption.getAttribute('data-invoice')
+                    })
 
                 const data = {
                     invoice: selectedOption.getAttribute('data-invoice'),
