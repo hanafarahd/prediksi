@@ -9,7 +9,7 @@
                     <h5 class="card-title fw-bold mb-4">
                         <a href="{{ '/pencatatan' }}"></a>
                         <b class="mx-2">
-                            Tambah Invoice
+                            Tambah Invoice Update
                         </b>
                     </h5>
                     <div class="card">
