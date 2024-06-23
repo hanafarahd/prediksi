@@ -26,7 +26,7 @@ Route::get('/pencatatan', [PencatatanController::class, 'index']);
 Route::get('/add-pencatatan', [PencatatanController::class, 'addPencatatan']);
 Route::get('/add-invoice', [PencatatanController::class, 'addInvoice']);
 Route::post('/add-invoice/store', [PencatatanController::class, 'storeInvoice']);
-Route::post('/add-pencatatan/store', [PencatatanController::class, 'input']);
+Route::post('/add-pencatatan/store/{id}', [PencatatanController::class, 'input']);
 // Route::post('/pencatatan/store/{invoice}', [PencatatanController::class, 'store']);
 // Route::get('/detail-pencatatan/{id}', [PencatatanController::class, 'detail']);
 Route::get('/delete-pencatatan/{id}', [PencatatanController::class, 'delete'])->name('delete-pencatatan');

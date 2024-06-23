@@ -9,5 +9,5 @@ class Pencatatan extends Model
 {
     use HasFactory;
     protected $table = 'pencatatans';
-    protected $fillable = ['cutoff_date','invoice','due_date','trans_date','p_piutang'];
+    protected $fillable = ['cutoff_date','invoice','due_date','trans_date','p_piutang','prediction'];
 }

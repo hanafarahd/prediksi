@@ -67,16 +67,19 @@ class PencatatanController extends Controller
         }
     }
 
-    public function input(Request $request)
+    public function input(Request $request,$id)
     {
-        dd('testing coyyy');
 
+        // dd($request->p_piutang);
+
+        // $pencatatan=pencatatan::where('invoice',$id)->first();
+        // dd($pencatatan, $id);
         try {
-            DB::table('pencatatans')->where('id', '')->update([
+            DB::table('pencatatans')->where('invoice',$id )->update([
                 'prediction' => $request->p_piutang,
             ]);
 
-            return redirect('/dashboard')->with('success', 'Berhasil menambahkan Data Piutang.');
+            return redirect('/pencatatan')->with('success', 'Berhasil menambahkan Data Piutang.');
         } catch (QueryException $e) {
             $errorMessage = $e->getMessage();
             dd($errorMessage);
