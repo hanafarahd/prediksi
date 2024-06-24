@@ -14,26 +14,43 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="mb-3">
-                                <select class="form-control" id="record-invoice" name="invoice" required>
+                                <select class="form-control" id="invoice-view" onchange="changeOption()" required>
                                     <option selected disabled>Pilih Invoice</option>
                                     @foreach ($debts as $item)
-                                        <option data-invoice={{ $item->invoice }} data-sale_type={{ $item->sale_type }}
-                                            data-salesman_code={{ $item->salesman_code }}
-                                            data-customer_group_id={{ $item->customer_group_id }}
-                                            data-territory_code={{ $item->territory_code }}
-                                            data-guarantee_letter={{ $item->guarantee_letter }}
-                                            data-invoice_amount={{ $item->invoice_amount }}
-                                            data-outstanding={{ $item->outstanding }}
-                                            data-cutoff_date={{ $item->cutoff_date }}
-                                            data-trans_date={{ $item->trans_date }} data-due_date={{ $item->due_date }}
-                                            data-exchange_freq={{ $item->exchange_freq }}
-                                            data-bill_freq={{ $item->bill_freq }}>
+                                        <option data-invoice="{{ $item->invoice }}" data-sale_type="{{ $item->sale_type }}"
+                                            data-salesman_code="{{ $item->salesman_code }}"
+                                            data-customer_group_id="{{ $item->customer_group_id }}"
+                                            data-territory_code="{{ $item->territory_code }}"
+                                            data-guarantee_letter="{{ $item->guarantee_letter }}"
+                                            data-invoice_amount="{{ $item->invoice_amount }}"
+                                            data-outstanding="{{ $item->outstanding }}"
+                                            data-cutoff_date="{{ $item->cutoff_date }}"
+                                            data-trans_date="{{ $item->trans_date }} "
+                                            data-due_date="{{ $item->due_date }}"
+                                            data-exchange_freq="{{ $item->exchange_freq }}"
+                                            data-bill_freq="{{ $item->bill_freq }}">
                                             {{ $item->invoice }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
+                        <x-input-view label="Invoice" id="input-invoice-view" value="Null" />
+                        <x-input-view label="Tipe Jual" id="sale-type-view" value="Null" />
+                        <x-input-view label="Kode Salesman" id="salesman-view" value="Null" />
+                        <x-input-view label="Customer Group" id="cust-group-view" value="Null" />
+                        <x-input-view label="Kode Wilayah" id="territory-view" value="Null" />
+                        <x-input-view label="Invoice Amount" id="amount-view" value="Null" />
+                        <x-input-view label="Outstanding" id="outstanding-view" value="Null" />
+                        <x-input-view label="Frekuensi Tukar" id="exchange-view" value="Null" />
+                        <x-input-view label="Frekuensi Tagih" id="bill-view" value="Null" />
+                        <x-input-view label="Garansi Letter" id="guarantee-view" value="Null" />
+                        <x-input-view label="Due Date" id="due-view" value="Null" />
+                        <x-input-view label="Cutoff Date" id="cutoff-view" value="Null" />
+                        <x-input-view label="Trans Date" id="trans-view" value="Null" />
                     </div>
 
                     <button class="btn btn-danger mt-3" onclick="sendColab(event)">
@@ -66,36 +83,54 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const invoice = document.getElementById('record-invoice');
+        const changeOption = () => {
+            const invoice = document.getElementById('invoice-view')
+            const selectedOption = invoice.options[invoice.selectedIndex];
 
-            invoice.addEventListener('change', function() {
-                const selectedOption = invoice.options[invoice.selectedIndex];
-                const form = document.getElementById('myForm')
+            const data = {
+                invoice: selectedOption.getAttribute('data-invoice'),
+                sale_type: selectedOption.getAttribute('data-sale_type'),
+                salesman_code: selectedOption.getAttribute('data-salesman_code'),
+                customer_group_id: selectedOption.getAttribute('data-customer_group_id'),
+                territory_code: selectedOption.getAttribute('data-territory_code'),
+                guarantee_letter: selectedOption.getAttribute('data-guarantee_letter'),
+                invoice_amount: selectedOption.getAttribute('data-invoice_amount'),
+                outstanding: selectedOption.getAttribute('data-outstanding'),
+                cutoff_date: selectedOption.getAttribute('data-cutoff_date'),
+                due_date: selectedOption.getAttribute('data-due_date'),
+                trans_date: selectedOption.getAttribute('data-trans_date'),
+                exchange_freq: selectedOption.getAttribute('data-exchange_freq'),
+                bill_freq: selectedOption.getAttribute('data-bill_freq'),
+            }
 
-                form.setAttribute('action',
-                    /add-pencatatan/store / $ {
-                        selectedOption.getAttribute('data-invoice')
-                    })
+            // const invoiceValue = selectedOption.getAttribute('data-invoice')
+            // const sale_type = selectedOption.getAttribute('data-sale_type')
+            // const salesman_code = selectedOption.getAttribute('data-salesman_code')
+            // const customer_group_id = selectedOption.getAttribute('data-customer_group_id')
+            // const territory_code = selectedOption.getAttribute('data-territory_code')
+            // const guarantee_letter = selectedOption.getAttribute('data-guarantee_letter')
+            // const invoice_amount = selectedOption.getAttribute('data-invoice_amount')
+            // const outstanding = selectedOption.getAttribute('data-outstanding')
+            // const cutoff_date = selectedOption.getAttribute('data-cutoff_date')
+            // const due_date = selectedOption.getAttribute('data-due_date')
+            // const trans_date = selectedOption.getAttribute('data-trans_date')
+            // const exchange_freq = selectedOption.getAttribute('data-exchange_freq')
+            // const bill_freq = selectedOption.getAttribute('data-bill_freq')
 
-                const data = {
-                    invoice: selectedOption.getAttribute('data-invoice'),
-                    sale_type: selectedOption.getAttribute('data-sale_type'),
-                    salesman_code: selectedOption.getAttribute('data-salesman_code'),
-                    customer_group_id: selectedOption.getAttribute('data-customer_group_id'),
-                    territory_code: selectedOption.getAttribute('data-territory_code'),
-                    guarantee_letter: selectedOption.getAttribute('data-guarantee_letter'),
-                    invoice_amount: selectedOption.getAttribute('data-invoice_amount'),
-                    outstanding: selectedOption.getAttribute('data-outstanding'),
-                    cutoff_date: selectedOption.getAttribute('data-cutoff_date'),
-                    due_date: selectedOption.getAttribute('data-due_date'),
-                    trans_date: selectedOption.getAttribute('data-trans_date'),
-                    exchange_freq: selectedOption.getAttribute('data-exchange_freq'),
-                    bill_freq: selectedOption.getAttribute('data-bill_freq'),
-                };
-
-            });
-        });
+            document.getElementById("input-invoice-view").value = data.invoice
+            document.getElementById("sale-type-view").value = data.sale_type
+            document.getElementById("salesman-view").value = data.salesman_code
+            document.getElementById("cust-group-view").value = data.customer_group_id
+            document.getElementById("territory-view").value = data.territory_code
+            document.getElementById("amount-view").value = data.invoice_amount
+            document.getElementById("outstanding-view").value = data.outstanding
+            document.getElementById("exchange-view").value = data.exchange_freq
+            document.getElementById("bill-view").value = data.bill_freq
+            document.getElementById("guarantee-view").value = data.guarantee_letter
+            document.getElementById("due-view").value = data.due_date
+            document.getElementById("trans-view").value = data.trans_date
+            document.getElementById("cutoff-view").value = data.cutoff_date
+        }
 
         function parseDate(dateStr) {
             let date = new Date(dateStr);
@@ -122,7 +157,7 @@
 
         function sendColab(e) {
             e.preventDefault();
-            const invoice = document.getElementById('record-invoice');
+            const invoice = document.getElementById('invoice-view');
             const selectedOption = invoice.options[invoice.selectedIndex];
 
             Swal.fire({

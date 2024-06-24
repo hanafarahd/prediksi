@@ -51,8 +51,8 @@ class PredictionController extends Controller
         // Buat instance dari Guzzle HTTP client
         $client = new Client();
 
-        // $testUrl = 'https://t0zbz929-5000.asse.devtunnels.ms/';
-        $url = 'http://localhost:5000/predict';
+        $url = 'https://t0zbz929-5000.asse.devtunnels.ms/';
+        // $url = 'http://localhost:5000/predict';
 
         // Buat permintaan POST ke endpoint Flask
         $response = $client->post($url, [
