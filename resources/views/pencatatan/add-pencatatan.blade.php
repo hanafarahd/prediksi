@@ -9,7 +9,7 @@
                     <b class="mx-2">Prediksi Data Piutang</b>
                 </h5>
 
-                <form id="myForm" method="POST" enctype="multipart/form-data">
+                <form id="myForm" onsubmit="submitFormPrediction()" method="POST" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="col-sm-6">
@@ -17,7 +17,8 @@
                                 <select class="form-control" id="invoice-view" onchange="changeOption()" required>
                                     <option selected disabled>Pilih Invoice</option>
                                     @foreach ($debts as $item)
-                                        <option data-invoice="{{ $item->invoice }}" data-sale_type="{{ $item->sale_type }}"
+                                        <option data-id="{{ $item->id }}" data-invoice="{{ $item->invoice }}"
+                                            data-sale_type="{{ $item->sale_type }}"
                                             data-salesman_code="{{ $item->salesman_code }}"
                                             data-customer_group_id="{{ $item->customer_group_id }}"
                                             data-territory_code="{{ $item->territory_code }}"
@@ -117,19 +118,19 @@
             // const exchange_freq = selectedOption.getAttribute('data-exchange_freq')
             // const bill_freq = selectedOption.getAttribute('data-bill_freq')
 
-            document.getElementById("input-invoice-view").value = data.invoice
-            document.getElementById("sale-type-view").value = data.sale_type
-            document.getElementById("salesman-view").value = data.salesman_code
-            document.getElementById("cust-group-view").value = data.customer_group_id
-            document.getElementById("territory-view").value = data.territory_code
-            document.getElementById("amount-view").value = data.invoice_amount
-            document.getElementById("outstanding-view").value = data.outstanding
-            document.getElementById("exchange-view").value = data.exchange_freq
-            document.getElementById("bill-view").value = data.bill_freq
-            document.getElementById("guarantee-view").value = data.guarantee_letter
-            document.getElementById("due-view").value = data.due_date
-            document.getElementById("trans-view").value = data.trans_date
-            document.getElementById("cutoff-view").value = data.cutoff_date
+            document.getElementById("input-invoice-view").value = `${data.invoice}`
+            document.getElementById("sale-type-view").value = `${data.sale_type}`
+            document.getElementById("salesman-view").value = `${data.salesman_code}`
+            document.getElementById("cust-group-view").value = `${data.customer_group_id}`
+            document.getElementById("territory-view").value = `${data.territory_code}`
+            document.getElementById("amount-view").value = `${data.invoice_amount}`
+            document.getElementById("outstanding-view").value = `${data.outstanding}`
+            document.getElementById("exchange-view").value = `${data.exchange_freq}`
+            document.getElementById("bill-view").value = `${data.bill_freq}`
+            document.getElementById("guarantee-view").value = `${data.guarantee_letter}`
+            document.getElementById("due-view").value = `${data.due_date}`
+            document.getElementById("trans-view").value = `${data.trans_date}`
+            document.getElementById("cutoff-view").value = `${data.cutoff_date}`
         }
 
         function parseDate(dateStr) {
@@ -141,18 +142,14 @@
             };
         }
 
-        function showSwal() {
-            Swal.fire({
-                title: "Simpan Data?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Ya",
-                cancelButtonText: "Tidak"
-            }).then((result) => {
-                if (result.isConfirmed) document.getElementById('myForm').submit()
-            });
+        const submitFormPrediction = () => {
+            const invoice = document.getElementById('invoice-view');
+            const selectedOption = invoice.options[invoice.selectedIndex];
+
+            const id = selectedOption.getAttribute('data-id')
+            const form = document.getElementById('myForm')
+
+            form.setAttribute('action', `/add-pencatatan/store/${id}`)
         }
 
         function sendColab(e) {

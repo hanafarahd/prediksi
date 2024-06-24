@@ -46,7 +46,8 @@
                                             <select class="form-control text-capitalize" id="invoice" name="sale_type"
                                                 required>
                                                 @foreach ($sales as $sale)
-                                                    <option value={{ $sale->id }}>{{ $sale->name }}</option>
+                                                    <option value={{ $sale->id }}>{{ $sale->id }}.
+                                                        {{ $sale->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -58,7 +59,8 @@
                                             <select class="form-control text-capitalize" id="invoice" name="salesman_code"
                                                 required>
                                                 @foreach ($salesmans as $salesman)
-                                                    <option value={{ $salesman->code }}>{{ $salesman->name }}</option>
+                                                    <option value={{ $salesman->code }}>{{ $salesman->code }}.
+                                                        {{ $salesman->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -70,7 +72,8 @@
                                             <select class="form-control text-capitalize" id="invoice"
                                                 name="customer_group_id" required>
                                                 @foreach ($customerGroups as $csGroup)
-                                                    <option value={{ $csGroup->id }}>{{ $csGroup->name }}</option>
+                                                    <option value={{ $csGroup->id }}>{{ $csGroup->id }}.
+                                                        {{ $csGroup->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -81,7 +84,8 @@
                                             <label class="form-label">Kode Wilayah*</label>
                                             <select class="form-control text-capitalize" name="territory_code" required>
                                                 @foreach ($territories as $territory)
-                                                    <option value={{ $territory->code }}>{{ $territory->name }}</option>
+                                                    <option value={{ $territory->code }}>{{ $territory->code }}.
+                                                        {{ $territory->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
