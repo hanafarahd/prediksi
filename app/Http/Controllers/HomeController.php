@@ -10,6 +10,10 @@ class HomeController extends Controller
     {
         $lateCount = Pencatatan::where('prediction', 1)->count();
         $notLateCount = Pencatatan::where('prediction', 0)->count();
-        return view('pencatatan.dashboard', ["late" => $lateCount, 'notLate' => $notLateCount]);
+
+        return view('pencatatan.dashboard', [
+            "late" => $lateCount,
+            'notLate' => $notLateCount
+        ]);
     }
 }
