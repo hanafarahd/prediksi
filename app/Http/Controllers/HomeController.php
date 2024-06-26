@@ -8,8 +8,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $lateCount = Pencatatan::where('prediction', 1)->count();
-        $notLateCount = Pencatatan::where('prediction', 0)->count();
+        $lateCount = Pencatatan::where('prediction', 'Terlambat')->count();
+        $notLateCount = Pencatatan::where('prediction', 'Tidak Terlambat')->count();
 
         return view('pencatatan.dashboard', [
             "late" => $lateCount,

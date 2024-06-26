@@ -10,14 +10,14 @@
                     <h5 class="mb-4"><b>Data Piutang</b></h5>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="mb-3">
+                            <di class="mb-3">
                                 <label class="form-label">
                                     Invoice*
                                 </label>
                                 <input type="text" class="form-control" id="invoiceOnlyNumber"
                                     onkeypress="return isNumber(event)" name="invoice" placeholder="Masukkan Nomor Invoice"
                                     required>
-                            </div>
+                                </di`v>
                         </div>
 
                         <div class="col-sm-6">

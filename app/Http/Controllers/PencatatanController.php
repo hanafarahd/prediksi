@@ -70,12 +70,8 @@ class PencatatanController extends Controller
     public function input(Request $request,$id)
     {
 
-        // dd($request->p_piutang);
-
-        // $pencatatan=pencatatan::where('invoice',$id)->first();
-        // dd($pencatatan, $id);
         try {
-            DB::table('pencatatans')->where('invoice',$id )->update([
+            DB::table('pencatatans')->where('id', $id)->update([
                 'prediction' => $request->p_piutang,
             ]);
 
