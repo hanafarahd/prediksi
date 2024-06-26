@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
@@ -23,6 +24,25 @@ class PredictionController extends Controller
         elseif ($outstanding >= 616853 && $outstanding <= 1572134) $outstanding = 2;
         elseif ($outstanding >= 1572135 && $outstanding <= 550544183) $outstanding = 3;
 
+        $dueDate = DateTime::createFromFormat(
+            'Y-m-d',
+            "{$req->due_year}-{$req->due_month}-{$req->due_day}"
+        );
+
+        $cutoffDate = DateTime::createFromFormat(
+            'Y-m-d',
+            "{$req->cutoff_year}-{$req->cutoff_month}-{$req->cutoff_day}"
+        );
+
+        $transDate = DateTime::createFromFormat(
+            'Y-m-d',
+            "{$req->trans_year}-{$req->trans_month}-{$req->trans_day}"
+        );
+
+        $lamaTransaksi = ($cutoffDate && $transDate) ? $cutoffDate->diff($transDate)->days : null;
+
+        $lamaJatuhTempo = ($dueDate && $cutoffDate) ? $dueDate->diff($cutoffDate)->days : null;
+
         $formattedData = [
             "Type_Jual" => $req->sale_type,
             "Kode_Salesman" => $req->salesman_code,
@@ -33,13 +53,11 @@ class PredictionController extends Controller
             "Frek_Tukar_Faktur" => $exchange_freq,
             "Frek_Tagih" => $req->bill_freq,
             "Ada_Garansi_Letter" => $req->guarantee_letter,
-            "Due_Month" => $req->due_month,
-            "Due_Day" => $req->due_day,
-            "Due_Year" => $req->due_year,
-            "Cutoff_Month" => $req->cutoff_month,
-            "Cutoff_Day" => $req->cutoff_day,
-            "Cutoff_Year" => $req->cutoff_year
+            'Lama_Transaksi' => $lamaTransaksi,
+            'Lama_Jatuh_Tempo' => $lamaJatuhTempo,
         ];
+
+        dd($formattedData);
 
         // Konversi nilai data menjadi bilangan bulat
         $data_int = [];

@@ -49,7 +49,6 @@
                         <x-input-view label="Frekuensi Tagih" id="bill-view" value="Null" />
                         <x-input-view label="Garansi Letter" id="guarantee-view" value="Null" />
                         <x-input-view label="Due Date" id="due-view" value="Null" />
-                        <x-input-view label="Cutoff Date" id="cutoff-view" value="Null" />
                         <x-input-view label="Trans Date" id="trans-view" value="Null" />
                     </div>
 
@@ -172,6 +171,7 @@
                 if (result.isConfirmed) {
                     const cutoffDate = parseDate(selectedOption.getAttribute('data-cutoff_date'));
                     const dueDate = parseDate(selectedOption.getAttribute('data-due_date'));
+                    const transDate = parseDate(selectedOption.getAttribute('data-trans_date'))
 
                     const data = {
                         invoice: parseInt(selectedOption.getAttribute('data-invoice')),
@@ -195,6 +195,9 @@
                         cutoff_month: cutoffDate.month,
                         cutoff_day: cutoffDate.day,
                         cutoff_year: cutoffDate.year,
+                        trans_month: transDate.month,
+                        trans_day: transDate.day,
+                        trans_year: transDate.year,
                     }
 
                     document.getElementById("loadingSpinner").style.display = "inline-block";
