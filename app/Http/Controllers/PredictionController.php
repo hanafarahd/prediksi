@@ -46,19 +46,9 @@ class PredictionController extends Controller
             'Lama_Jatuh_Tempo' => $lamaJatuhTempo,
         ];
 
-        // Konversi nilai data menjadi bilangan bulat
-        // $data_int = [];
-        // foreach ($formattedData as $value) $data_int[] = (int) $value;
-
-        // Ubah data ke dalam format list
-        // $data_list = $data_int;
-
-        // return response()->json($data_list);
-
         // Buat instance dari Guzzle HTTP client
         $client = new Client();
 
-        // $url = 'https://t0zbz929-5000.asse.devtunnels.ms/';
         $url = 'http://localhost:5000/predict';
 
         // Buat permintaan POST ke endpoint Flask
