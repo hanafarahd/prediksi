@@ -13,6 +13,7 @@ class PencatatanController extends Controller
     public function index()
     {
         $pencatatan = DB::table('pencatatans')->get();
+
         return view('pencatatan.pencatatan', compact('pencatatan'));
     }
 

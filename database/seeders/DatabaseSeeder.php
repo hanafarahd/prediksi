@@ -22,9 +22,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         DB::table('salesmans')->insert([
-            ['code' => 73, 'name' => 'yonathan leonardo'],
-            ['code' => 22, 'name' => 'hary budiman'],
-            ['code' => 70, 'name' => 'prastio cahyo kartika'],
+            ['code' => 74, 'name' => 'yonathan leonardo'],
+            ['code' => 73, 'name' => 'hary budiman'],
+            ['code' => 22, 'name' => 'prastio cahyo kartika'],
+            ['code' => 70, 'name' => 'Deasy Amelia Sugiarti'],
             ['code' => 46, 'name' => 'stefanus soedinardjo'],
             ['code' => 77, 'name' => 'yusak triyanto'],
             ['code' => 63, 'name' => 'sugihartono'],
@@ -101,6 +102,11 @@ class DatabaseSeeder extends Seeder
             ["code" => 101201, "name" => "Krian"],
             ["code" => 101102, "name" => "Porong"],
             ["code" => 100301, "name" => "*Madiun (Tdk Dipakai)"]
+        ]);
+
+        DB::table('pencatatans')->insert([
+            
+
         ]);
     }
 }

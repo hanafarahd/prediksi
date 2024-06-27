@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
@@ -14,6 +15,10 @@ class PredictionController extends Controller
         $outstanding = intval($req->outstanding);
         $invoice_amount = intval($req->invoice_amount);
 
+        $cutoffDate = Carbon::parse($req->cutoff_date);
+        $dueDate = Carbon::parse($req->due_date);
+        $transDate = Carbon::parse($req->trans_date);
+
         if ($invoice_amount >= 200 && $invoice_amount <= 394253) $invoice_amount = 0;
         elseif ($invoice_amount >= 394254 && $invoice_amount <= 769896) $invoice_amount = 1;
         elseif ($invoice_amount >= 769897 && $invoice_amount <= 1946398) $invoice_amount = 2;
@@ -23,25 +28,9 @@ class PredictionController extends Controller
         elseif ($outstanding >= 281711 && $outstanding <= 616852) $outstanding = 1;
         elseif ($outstanding >= 616853 && $outstanding <= 1572134) $outstanding = 2;
         elseif ($outstanding >= 1572135 && $outstanding <= 550544183) $outstanding = 3;
-
-        $dueDate = DateTime::createFromFormat(
-            'Y-m-d',
-            "{$req->due_year}-{$req->due_month}-{$req->due_day}"
-        );
-
-        $cutoffDate = DateTime::createFromFormat(
-            'Y-m-d',
-            "{$req->cutoff_year}-{$req->cutoff_month}-{$req->cutoff_day}"
-        );
-
-        $transDate = DateTime::createFromFormat(
-            'Y-m-d',
-            "{$req->trans_year}-{$req->trans_month}-{$req->trans_day}"
-        );
-
-        $lamaTransaksi = ($cutoffDate && $transDate) ? $cutoffDate->diff($transDate)->days : null;
-
-        $lamaJatuhTempo = ($dueDate && $cutoffDate) ? $dueDate->diff($cutoffDate)->days : null;
+       
+        $lamaTransaksi = $cutoffDate->diffInDays($transDate);
+        $lamaJatuhTempo = $dueDate->diffInDays($cutoffDate, false);
 
         $formattedData = [
             "Type_Jual" => $req->sale_type,
@@ -56,8 +45,6 @@ class PredictionController extends Controller
             'Lama_Transaksi' => $lamaTransaksi,
             'Lama_Jatuh_Tempo' => $lamaJatuhTempo,
         ];
-
-        dd($formattedData);
 
         // Konversi nilai data menjadi bilangan bulat
         // $data_int = [];

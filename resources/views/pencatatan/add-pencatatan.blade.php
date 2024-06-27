@@ -166,9 +166,9 @@
                 cancelButtonText: "Tidak"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const cutoffDate = parseDate(selectedOption.getAttribute('data-cutoff_date'));
-                    const dueDate = parseDate(selectedOption.getAttribute('data-due_date'));
-                    const transDate = parseDate(selectedOption.getAttribute('data-trans_date'))
+                    const cutoffDate = selectedOption.getAttribute('data-cutoff_date');
+                    const dueDate = selectedOption.getAttribute('data-due_date');
+                    const transDate = selectedOption.getAttribute('data-trans_date')
 
                     const data = {
                         invoice: parseInt(selectedOption.getAttribute('data-invoice')),
@@ -182,21 +182,23 @@
                         outstanding: parseInt(selectedOption.getAttribute('data-outstanding')),
                         exchange_freq: parseInt(selectedOption.getAttribute('data-exchange_freq')),
                         bill_freq: parseInt(selectedOption.getAttribute('data-bill_freq')),
+                        cutoff_date: cutoffDate,
+                        due_date: dueDate,
+                        trans_date: transDate
                     };
 
-                    const fixedData = {
-                        ...data,
-                        due_month: dueDate.month,
-                        due_day: dueDate.day,
-                        due_year: dueDate.year,
-                        cutoff_month: cutoffDate.month,
-                        cutoff_day: cutoffDate.day,
-                        cutoff_year: cutoffDate.year,
-                        trans_month: transDate.month,
-                        trans_day: transDate.day,
-                        trans_year: transDate.year,
-                    }
-
+                    // const fixedData = {
+                    //     ...data,
+                    //     due_month: dueDate.month,
+                    //     due_day: dueDate.day,
+                    //     due_year: dueDate.year,
+                    //     cutoff_month: cutoffDate.month,
+                    //     cutoff_day: cutoffDate.day,
+                    //     cutoff_year: cutoffDate.year,
+                    //     trans_month: transDate.month,
+                    //     trans_day: transDate.day,
+                    //     trans_year: transDate.year,
+                    // }
                     document.getElementById("loadingSpinner").style.display = "inline-block";
 
                     // Sembunyikan hasil prediksi
@@ -208,7 +210,7 @@
                             headers: {
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify(fixedData)
+                            body: JSON.stringify(data)
                         })
                         .then(response => response.json())
                         .then(data => {

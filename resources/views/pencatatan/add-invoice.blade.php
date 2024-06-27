@@ -15,8 +15,8 @@
                                     Invoice*
                                 </label>
                                 <input type="text" class="form-control" id="invoiceOnlyNumber"
-                                    onkeypress="return isNumber(event)" name="invoice" placeholder="Masukkan Nomor Invoice"
-                                    required>
+                                    onkeypress="return isNumberMaxSix(event)" name="invoice"
+                                    placeholder="Masukkan Nomor Invoice" required>
                                 </di`v>
                         </div>
 
@@ -132,7 +132,10 @@
     </div>
 
     <script>
-        const isNumber = (evt) => /\d/.test(evt.key);
+        const isNumberMaxSix = (evt) => /^[0-9]{0,6}$/.test(evt.target.value + evt.key);
+        const isNumber = (evt) => /^[0-9]/.test(evt.target.value + evt.key);
+
+
 
         function sendColab(e) {
             e.preventDefault();
